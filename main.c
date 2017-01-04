@@ -24,7 +24,11 @@ struct node {
 
 /************** Local variables **************/
 
+/* Size of tree (T != NULL) */
 static int treeSize = 1;
+
+/* Pointer to root */
+static node_t* T    = NULL;
 
 /************** Helper methods **************/
 
@@ -62,6 +66,7 @@ static void deleteNode(node_t* x) {
 
 /************** Comparison method **************/
 
+/* Returns 1 if a >= b */
 static int compareTo(int a, int b) {
     if (a >= b)
         return 1;
@@ -115,7 +120,7 @@ static void inOrderTreeWalk(node_t* x) {
     
     if (x != NULL) {
         inOrderTreeWalk(x->left);
-        printf("key (%d)\n", x->key);
+        printf("%d ", x->key);
         inOrderTreeWalk(x->right);
     }  
 }
@@ -126,7 +131,7 @@ static void postOrderTreeWalk(node_t* x) {
     if (x != NULL) {
         inOrderTreeWalk(x->left);
         inOrderTreeWalk(x->right);
-		printf("key (%d)\n", x->key);
+		printf("%d ", x->key);
     }  
 }
 
@@ -134,7 +139,7 @@ static void postOrderTreeWalk(node_t* x) {
 static void preOrderTreeWalk(node_t* x) {
     
     if (x != NULL) {
-		printf("key (%d)\n", x->key);
+		printf("%d ", x->key);
         inOrderTreeWalk(x->left);
         inOrderTreeWalk(x->right);
     }  
@@ -174,7 +179,10 @@ static node_t* treeSearch(node_t* x, int key) {
 
 /* Return the size of the tree */
 static int size() {
-	return treeSize;
+	if (T != NULL)
+		return treeSize;
+	else
+		return 0;
 }
 
 /* Return the successor to 'x' */
@@ -199,7 +207,7 @@ int main(int argc, const char * argv[]) {
     /* Figure 13.2 'Introduction to algorithms */
 	/* 15 6 18 3 7 17 20 2 4 13 9 */
 	
-    node_t *T = newNode();
+    T = newNode();
     T->key = 15;
     
     node_t* z1 = newNode();
@@ -244,12 +252,15 @@ int main(int argc, const char * argv[]) {
 	
 	printf("Pre order tree walk\n");
 	preOrderTreeWalk(T);
+	printf("\n");
     
 	printf("In order tree walk\n");
     inOrderTreeWalk(T);
+	printf("\n");
 	
 	printf("Post order tree walk\n");
 	postOrderTreeWalk(T);
+	printf("\n");
     
     node_t* z50 = newNode();
     z50 = treeMaximum(T);
@@ -264,13 +275,13 @@ int main(int argc, const char * argv[]) {
     node_t* z70;
     z70 = treeSearch(T, 7);
     if (z70 != NULL) {
-        printf("Key found (%d) (%p)\n", z70->key, z70);
+        printf("Key found (%d) (Correct key=7)\n", z70->key);
     }
 	
 	printf("The size of the tree (%d)\n", size());
 	
 	node_t* z80 = treeSuccessor(T);
-	printf("Tree successor to T (root) has value (%d)\n", z80->key);
+	printf("Tree successor to T (key=%d) has value (%d)\n", T->key, z80->key);
     
     return 0;
 }
