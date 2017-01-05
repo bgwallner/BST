@@ -199,6 +199,40 @@ static node_t* treeSuccessor(node_t* x) {
 	return y;
 }
 
+/* Deletes a node 'z' from 'T' and returns 'z' */
+/* for the client to free memory.              */
+static node_t* treeDelete(node_t* T, node_t* z) {
+	node_t* y = NULL;
+	node_t* x = NULL;
+	
+	if (z->left == NULL || z->right == NULL)
+		y = z;
+	else 
+		y = treeSuccessor(z);
+	
+	if (y->left != NULL)
+		x = y->left;
+	else
+		x = y->right;
+	
+	if (x != NULL)
+		x->parent = y->parent;
+	
+	node_t* temp = y->parent;
+	if (y->parent == NULL)
+		T = x;
+	else if (y == temp->left)
+		temp->left = x;
+	else 
+		temp->right = x;
+	
+	if (y != z) {
+		z->key = y->key;
+	}
+	
+	return y;
+}
+
 /************** Test client **************/
 
 int main(int argc, const char * argv[]) {
@@ -206,6 +240,9 @@ int main(int argc, const char * argv[]) {
     
     /* Figure 13.2 'Introduction to algorithms */
 	/* 15 6 18 3 7 17 20 2 4 13 9 */
+	
+	printf("/******************* TEST INSERTION *********************/ \n");
+	printf("\n");
 	
     T = newNode();
     T->key = 15;
@@ -250,38 +287,105 @@ int main(int argc, const char * argv[]) {
     z10->key = 9;
     treeInsert(T, z10);
 	
+    printf("/******************* TEST TREEWALK *********************/ \n");
+	printf("\n");
+	
 	printf("Pre order tree walk\n");
 	preOrderTreeWalk(T);
+	printf("\n");
 	printf("\n");
     
 	printf("In order tree walk\n");
     inOrderTreeWalk(T);
 	printf("\n");
+	printf("\n");
 	
 	printf("Post order tree walk\n");
 	postOrderTreeWalk(T);
 	printf("\n");
+	printf("\n");
+	
+    printf("/******************* TEST MAX/MIN NODES *********************/ \n");
+	printf("\n");
+	
+    node_t* temp = treeMaximum(T);
+    printf("Tree max is (%d)\n", temp->key);
+	printf("\n");
     
-    node_t* z50 = newNode();
-    z50 = treeMaximum(T);
-    printf("Tree max is (%d)\n", z50->key);
-    deleteNode(z50);
+    temp = treeMinimum(T);
+    printf("Tree min is (%d)\n", temp->key);
+	printf("\n");
     
-    node_t* z60 = newNode();
-    z60 = treeMinimum(T);
-    printf("Tree min is (%d)\n", z60->key);
-    deleteNode(z60);
-    
+	printf("/******************* TEST TREE SEARCH *********************/ \n");
+	printf("\n");
+	
     node_t* z70;
     z70 = treeSearch(T, 7);
     if (z70 != NULL) {
         printf("Key found (%d) (Correct key=7)\n", z70->key);
+		printf("\n");
     }
 	
+	printf("/******************* TEST TREE SIZE *********************/ \n");
+	printf("\n");
+	
 	printf("The size of the tree (%d)\n", size());
+	printf("\n");
+	
+	printf("/******************* TEST TREE SUCCESSOR *********************/ \n");
+	printf("\n");
 	
 	node_t* z80 = treeSuccessor(T);
 	printf("Tree successor to T (key=%d) has value (%d)\n", T->key, z80->key);
+	printf("\n");
+	
+	printf("/******************* TEST TREE DELETION *********************/ \n");
+	printf("\n");
+	
+	/******************* CASE 1 *********************/
+	
+	/* Remove element with no children z8 (key=4) */
+	
+	printf("Deleting key=4\n");
+	node_t* deleted = treeDelete(T, z8);
+	
+	/* Free memory */
+	deleteNode(deleted);
+	
+	printf("In order tree walk\n");
+    inOrderTreeWalk(T);
+	printf("\n");
+	printf("\n");
+	
+	/******************* CASE 2 *********************/
+	
+	/* Remove element with one child z9 (key=13) */
+	printf("Deleting key=13\n");
+	deleted = treeDelete(T, z9);
+	
+    /* Free memory */
+	deleteNode(deleted);
+	
+	printf("In order tree walk\n");
+    inOrderTreeWalk(T);
+	printf("\n");
+	printf("\n");
+	
+	/******************* CASE 3 *********************/
+	
+	/* Remove element with two children z2 (key=18) */
+	printf("Deleting key=18\n");
+	deleted = treeDelete(T, z2);
+	
+    /* Free memory */
+	deleteNode(deleted);
+	
+	printf("In order tree walk\n");
+    inOrderTreeWalk(T);
+	printf("\n");
+	printf("\n");
     
+	printf("/******************* END TEST *********************/ \n");
+	
     return 0;
 }
