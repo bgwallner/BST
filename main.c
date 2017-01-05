@@ -16,10 +16,10 @@
 typedef struct node node_t;
 
 struct node {
-    node_t* left;
-    node_t* right;
+	node_t* left;
+	node_t* right;
 	node_t* parent;
-    int key;
+	int key;
 };
 
 /************** Local variables **************/
@@ -35,43 +35,43 @@ static node_t* T    = NULL;
 /* Return a new node of 'node_t' */
 static node_t* newNode() {
 
-    /* Create node */
-    node_t *node = malloc(sizeof(node_t));
+	/* Create node */
+	node_t *node = malloc(sizeof(node_t));
 
-    /* Init parameters */
-    node->key = 0;
-    node->right = NULL;
-    node->left = NULL;
+	/* Init parameters */
+	node->key = 0;
+	node->right = NULL;
+	node->left = NULL;
 	node->parent = NULL;
 
-    return node;
+	return node;
 }
 
 /* Deletes node 'x'. Must not be called unless */
 /* x->right = x->left = NULL.                  */
 static void deleteNode(node_t* x) {
 
-    /* Return if node not valid */
-    if (x == NULL)
-        return;
+	/* Return if node not valid */
+	if (x == NULL)
+		return;
 
-    /* Return if children not NULL */
-    if (x->left == NULL || x->right == NULL)
-        return;
+	/* Return if children not NULL */
+	if (x->left == NULL || x->right == NULL)
+		return;
 
-    /* Free node */
-    free(x);
-    x = NULL;
+	/* Free node */
+	free(x);
+	x = NULL;
 }
 
 /************** Comparison method **************/
 
 /* Returns 1 if a >= b */
 static int compareTo(int a, int b) {
-    if (a >= b)
-        return 1;
-    else
-        return -1;
+	if (a >= b)
+		return 1;
+	else
+		return -1;
 }
 
 /************** BST implementation **************/
@@ -79,37 +79,37 @@ static int compareTo(int a, int b) {
 /* Inserts node 'z' into BST tree 'T' */
 static void treeInsert(node_t* T, node_t* z) {
 
-    /* Return if node not valid */
-    if (T == NULL || z == NULL)
-        return;
+	/* Return if node not valid */
+	if (T == NULL || z == NULL)
+		return;
 
-    node_t* y = NULL;
-    node_t* x = T;
-    node_t* pz = NULL;
+	node_t* y = NULL;
+	node_t* x = T;
+	node_t* pz = NULL;
 
-    /* Traverse 'T' until the right place found */
-    while(x != NULL) {
-        /* Save parent of 'x' in 'y' */
-        y = x;
+	/* Traverse 'T' until the right place found */
+	while(x != NULL) {
+		/* Save parent of 'x' in 'y' */
+		y = x;
 
-        /* If z less than x, go left. Otherwise go right */
-        if (compareTo(z->key, x->key) < 0)
-            x = x->left;
-        else
-            x = x->right;
-    }
+		/* If z less than x, go left. Otherwise go right */
+		if (compareTo(z->key, x->key) < 0)
+			x = x->left;
+		else
+			x = x->right;
+	}
 
-    /* Store parent */
-    z->parent = y;
+	/* Store parent */
+	z->parent = y;
 
-    if (y == NULL)
-        T = z;
-    else {
-        if (compareTo(z->key, y->key) < 0)
-            y->left = z;
-        else
-            y->right = z;
-    }
+	if (y == NULL)
+		T = z;
+	else {
+		if (compareTo(z->key, y->key) < 0)
+			y->left = z;
+		else
+			y->right = z;
+	}
 
 	/* Increase the size */
 	treeSize++;
@@ -118,63 +118,62 @@ static void treeInsert(node_t* T, node_t* z) {
 /* Traverses tree in increasing (sorted) order and print keys */
 static void inOrderTreeWalk(node_t* x) {
 
-    if (x != NULL) {
-        inOrderTreeWalk(x->left);
-        printf("%d ", x->key);
-        inOrderTreeWalk(x->right);
-    }
+	if (x != NULL) {
+		inOrderTreeWalk(x->left);
+		printf("%d ", x->key);
+		inOrderTreeWalk(x->right);
+	}
 }
 
 /* Traverses tree in post order and print keys */
 static void postOrderTreeWalk(node_t* x) {
-    
-    if (x != NULL) {
-        inOrderTreeWalk(x->left);
-        inOrderTreeWalk(x->right);
+	if (x != NULL) {
+		inOrderTreeWalk(x->left);
+		inOrderTreeWalk(x->right);
 		printf("%d ", x->key);
-    }
+	}
 }
 
 /* Traverses tree in pre order and print keys */
 static void preOrderTreeWalk(node_t* x) {
 
-    if (x != NULL) {
+	if (x != NULL) {
 		printf("%d ", x->key);
-        inOrderTreeWalk(x->left);
-        inOrderTreeWalk(x->right);
-    }  
+		inOrderTreeWalk(x->left);
+		inOrderTreeWalk(x->right);
+	}
 }
 
 /* Return maximum in tree */
 static node_t* treeMaximum(node_t* x) {
-    node_t* px = NULL;
-    /* Go right */
-    while (x != NULL) {
-        px = x;
-        x = x->right;
-    }
-    return px;
+	node_t* px = NULL;
+	/* Go right */
+	while (x != NULL) {
+		px = x;
+		x = x->right;
+	}
+	return px;
 }
 
 /* Return minimum in tree */
 static node_t* treeMinimum(node_t* x) {
-    node_t* px = NULL;
-    /* Go left */
-    while (x != NULL) {
-        px = x;
-        x = x->left;
-    }
-    return px;
+	node_t* px = NULL;
+	/* Go left */
+	while (x != NULL) {
+		px = x;
+		x = x->left;
+	}
+	return px;
 }
 
 /* Return node 'x' containing key */
 static node_t* treeSearch(node_t* x, int key) {
-    if (x == NULL || key == x->key)
-        return x;
-    if (key < x->key)
-        return treeSearch(x->left, key);
-    else
-        return treeSearch(x->right, key);
+	if (x == NULL || key == x->key)
+		return x;
+	if (key < x->key)
+		return treeSearch(x->left, key);
+	else
+		return treeSearch(x->right, key);
 }
 
 /* Return the size of the tree */
@@ -236,9 +235,11 @@ static node_t* treeDelete(node_t* T, node_t* z) {
 /************** Test client **************/
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
 
-    /* Figure 13.2 'Introduction to algorithms */
+	// insert code here...
+
+
+	/* Figure 13.2 'Introduction to algorithms */
 	/* 15 6 18 3 7 17 20 2 4 13 9 */
 
 	printf("\n");
@@ -251,44 +252,44 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 
 	/* Create the root */
-    T = newNode();
-    T->key = 15;
+	T = newNode();
+	T->key = 15;
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
-    node_t* z1 = newNode();
-    z1->key = 6;
-    treeInsert(T, z1);
+	node_t* z1 = newNode();
+	z1->key = 6;
+	treeInsert(T, z1);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
-    node_t* z2 = newNode();
-    z2->key = 18;
-    treeInsert(T, z2);
+	node_t* z2 = newNode();
+	z2->key = 18;
+	treeInsert(T, z2);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
-    node_t* z3 = newNode();
-    z3->key = 3;
-    treeInsert(T, z3);
+	node_t* z3 = newNode();
+	z3->key = 3;
+	treeInsert(T, z3);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
-    node_t* z4 = newNode();
-    z4->key = 7;
-    treeInsert(T, z4);
+	node_t* z4 = newNode();
+	z4->key = 7;
+	treeInsert(T, z4);
 	
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
@@ -296,8 +297,8 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 
 	node_t* z5 = newNode();
-    z5->key = 17;
-    treeInsert(T, z5);
+	z5->key = 17;
+	treeInsert(T, z5);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
@@ -305,8 +306,8 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 
 	node_t* z6 = newNode();
-    z6->key = 20;
-    treeInsert(T, z6);
+	z6->key = 20;
+	treeInsert(T, z6);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
@@ -314,8 +315,8 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 
 	node_t* z7 = newNode();
-    z7->key = 2;
-    treeInsert(T, z7);
+	z7->key = 2;
+	treeInsert(T, z7);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
@@ -323,8 +324,8 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 
 	node_t* z8 = newNode();
-    z8->key = 4;
-    treeInsert(T, z8);
+	z8->key = 4;
+	treeInsert(T, z8);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
@@ -332,8 +333,8 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 
 	node_t* z9 = newNode();
-    z9->key = 13;
-    treeInsert(T, z9);
+	z9->key = 13;
+	treeInsert(T, z9);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
@@ -341,15 +342,15 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 
 	node_t* z10 = newNode();
-    z10->key = 9;
-    treeInsert(T, z10);
+	z10->key = 9;
+	treeInsert(T, z10);
 
 	printf("Current tree T: ");
 	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
-    printf("/******************* (2) TEST TREEWALK **********************/ \n");
+	printf("/******************* (2) TEST TREEWALK **********************/ \n");
 	printf("\n");
 
 	printf("Pre order tree walk: ");
@@ -358,7 +359,7 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 
 	printf("In order tree walk: ");
-    inOrderTreeWalk(T);
+	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
@@ -370,23 +371,23 @@ int main(int argc, const char * argv[]) {
     printf("/******************* (3) TEST MAX/MIN NODES *****************/ \n");
 	printf("\n");
 
-    node_t* temp = treeMaximum(T);
-    printf("Tree max: (%d)\n", temp->key);
+	node_t* temp = treeMaximum(T);
+	printf("Tree max: (%d)\n", temp->key);
 	printf("\n");
 
-    temp = treeMinimum(T);
-    printf("Tree min: (%d)\n", temp->key);
+	temp = treeMinimum(T);
+	printf("Tree min: (%d)\n", temp->key);
 	printf("\n");
 
 	printf("/******************* (4) TEST TREE SEARCH *******************/ \n");
 	printf("\n");
 
-    node_t* z70;
-    z70 = treeSearch(T, 7);
-    if (z70 != NULL) {
-        printf("Key found: (%d) (Correct key=7)\n", z70->key);
+	node_t* z70;
+	z70 = treeSearch(T, 7);
+	if (z70 != NULL) {
+		printf("Key found: (%d) (Correct key=7)\n", z70->key);
 		printf("\n");
-    }
+	}
 
 	printf("/******************* (5) TEST TREE SIZE *********************/ \n");
 	printf("\n");
@@ -416,7 +417,7 @@ int main(int argc, const char * argv[]) {
 	deleteNode(deleted);
 
 	printf("In order tree walk: ");
-    inOrderTreeWalk(T);
+	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
@@ -427,11 +428,11 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 	deleted = treeDelete(T, z9);
 
-    /* Free memory */
+	/* Free memory */
 	deleteNode(deleted);
 
 	printf("In order tree walk: ");
-    inOrderTreeWalk(T);
+	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
@@ -442,15 +443,15 @@ int main(int argc, const char * argv[]) {
 	printf("\n");
 	deleted = treeDelete(T, z2);
 
-    /* Free memory */
+	/* Free memory */
 	deleteNode(deleted);
 
 	printf("In order tree walk: ");
-    inOrderTreeWalk(T);
+	inOrderTreeWalk(T);
 	printf("\n");
 	printf("\n");
 
 	printf("/******************* END TEST *******************************/ \n");
 
-    return 0;
+	return 0;
 }
